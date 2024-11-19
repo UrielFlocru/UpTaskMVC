@@ -26,7 +26,9 @@
 
     .cerrar-sesion{
         @include m.boton(color.adjust(v.$indigo, $lightness: -20%), v.$blanco);
-        padding: 1rem;
-        border-radius: .5rem;
+        &{
+            padding: 1rem;
+            border-radius: .5rem;
+        }
     }
 }
