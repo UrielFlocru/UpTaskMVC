@@ -34,6 +34,10 @@
 
     p{
         font-size: 2rem;
+
+        &:hover{
+            cursor: pointer;
+        }
     }
 
     .opciones{
@@ -51,7 +55,7 @@
                 cursor: pointer;
             }
         }
-        .completa{
+        .completada{
             background-color: v.$azul;
             color: v.$blanco;
         }
