@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Model\Proyecto;
 use MVC\Router;
+use Model\Usuario;
 
 class DashBoardController {
     
@@ -74,11 +75,44 @@ class DashBoardController {
 
     public static function perfil (Router $router){
         session_start();
-
         isAuth();
+
+        $usuario = Usuario::find($_SESSION['id']);
+        $alertas = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $usuario->sincronizar($_POST);
+            $alertas = $usuario->validarPerfil();
+
+            if (empty($alertas)){
+
+                $usuarioExiste = Usuario::where('email', $usuario->email);
+                
+                if($usuarioExiste && $usuarioExiste->id !== $usuario->id){
+                    //Error
+                    Usuario::setAlerta('error','El correo electrónico ya se encuentra registrado');
+                    $alertas = Usuario::getAlertas();
+
+                } else {
+                    //Guardar cambios
+                    $usuario->guardar();
+
+                    Usuario::setAlerta('exito','Guardado correctamente');
+                    $alertas = Usuario::getAlertas();
+
+                    $_SESSION['nombre'] = $usuario->nombre;
+                }
+
+                
+
+            }
+
+        }
         
         $router->render('dashboard/perfil',[
-            'titulo' => 'Perfil'
+            'titulo' => 'Perfil',
+            'usuario' => $usuario,
+            'alertas' => $alertas
         ]);
     }
 }

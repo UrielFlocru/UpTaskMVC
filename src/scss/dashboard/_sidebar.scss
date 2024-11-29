@@ -7,10 +7,13 @@
 
     @include m.tablet{
         display: block;
+        text-align: left;
     }
 
     background-color: v.$indigo;
     padding: 2rem;
+
+
     h2{
         color: v.$blanco;
         margin: 0;
@@ -39,5 +42,21 @@
 
     &.mostrar{
         display: block;
+        text-align: center;
+    }
+
+    .cerrar-sesion-mobile{
+        margin-top: 2rem;
+
+        .cerrar-sesion{
+            text-transform: uppercase;
+            border-radius: 1rem;
+
+            @include m.boton(v.$blanco, v.$indigo)
+        }
+
+        @include m.tablet{
+            display: none;
+        }
     }
 }
