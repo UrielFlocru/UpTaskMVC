@@ -37,6 +37,8 @@ $router->post('/crear-proyecto',[DashBoardController::class,'crear_proyecto']);
 $router->get('/proyecto',[DashBoardController::class,'proyecto']);
 $router->get('/perfil',[DashBoardController::class,'perfil']);
 $router->post('/perfil',[DashBoardController::class,'perfil']);
+$router->get('/cambiar-password',[DashBoardController::class,'cambiarPass']);
+$router->post('/cambiar-password',[DashBoardController::class,'cambiarPass']);
 
 //API para las tareas
 

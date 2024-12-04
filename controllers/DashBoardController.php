@@ -115,4 +115,55 @@ class DashBoardController {
             'alertas' => $alertas
         ]);
     }
+
+    public static function cambiarPass (Router $router){
+        session_start();
+        isAuth();
+
+        $alertas = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $usuario = Usuario::find($_SESSION['id']);
+
+            //Sincronizar los datos
+            $usuario->sincronizar($_POST);
+
+            $alertas = $usuario->nuevaPass();
+
+            if (empty($alertas)){
+                $resultado = $usuario->comprobarPass();
+
+                if ($resultado){
+
+                    $usuario->password = $usuario->nueva;
+
+                    //Eliminar propiedades no necesarias
+                    unset($usuario->actual);
+                    unset($usuario->nueva);
+
+                    //Hashear la nueva contraseña
+                    $usuario->hashPass();
+
+                    //Guardar nueva contraseña
+                    $resultado = $usuario->guardar();
+
+                    if ($resultado){
+                        Usuario::setAlerta('exito', 'Contraseña guardada correctamente');
+                        $alertas = Usuario::getAlertas();
+                    }
+
+                } else {
+                    Usuario::setAlerta('error', 'Contraseña incorrecta');
+                    $alertas = Usuario::getAlertas();
+                }
+            }
+
+        }
+
+        $router->render('dashboard/cambiar-password',[
+            'titulo' => 'Cambiar contraseña',
+            'alertas' => $alertas
+        ]);
+    }
+
 }
